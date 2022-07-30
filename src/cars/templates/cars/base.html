@@ -1,0 +1,101 @@
+{% load static %}
+{% load cars_tags %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <link rel="shortcut icon" href="{% static 'cars/images/title_car.png' %}" type="image/png" />
+    <title>{{ title }}</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <link type="text/css" href="{% static 'cars/css/styles.css' %}" rel="stylesheet" />
+</head>
+<body>
+<table class="table-page" border=0 cellpadding="0" cellspacing="0">
+<tr><td valign="top">
+{% block mainmenu %}
+    <div class="header">
+        <ul id="mainmenu" class="mainmenu">
+            <li class="logo"><a href="{% url 'home' %}"><div class="logo"></div></a></li>
+            {% for m in menu %}
+            <li><a href="{% url m.url_name %}">{{ m.title }}</a></li>
+            {% endfor %}
+            {% if request.user.is_authenticated %}
+            <li class="last">{{ user.username }} | <a href="{% url 'logout' %}">Выйти</a></li>
+            {% else %}
+            <li class="last"><a href="{% url 'register' %}">Регистрация</a> | <a href="{% url 'login' %}">Войти</a></li>
+            {% endif %}
+        </ul>
+
+    </div>
+{% endblock mainmenu %}
+
+
+
+    <table class="table-content" border=0 cellpadding="0" cellspacing="0">
+<tr>
+<!--    sidebar слева-->
+    <td valign="top" class="left-chapters">
+    <ul id="left-chapters">
+{% if brand_selected == 0 %}
+        <li class="selected">Все категории</li>
+{% else %}
+        <li><a href="{% url 'home' %}">Все категории</a></li>
+{% endif %}
+{% for b in brands %}
+{% if b.number_of_cars > 0 %}
+        {% if b.pk == brand_selected %}
+        <li class="selected">{{b.name}}</li>
+        {% else %}
+        <li><a href="{{ b.get_absolute_url }}">{{b.name}}</a></li>
+        {% endif %}
+{% endif %}
+{% endfor %}
+
+        <li class="share">
+                <p>Мой гитхаб</p>
+                <a class="share-github" href="https://github.com/AndreiMnkvch"></a>
+        </li>
+        </ul>
+    </td>
+<!--    конец sidebara-->
+    <td valign="top" class="content">
+        <div class="content-text">
+            {% block content %}
+            {% endblock %}
+            {% if page_obj.has_other_pages %}
+            <nav class="list-pages">
+                <ul>
+                    {% if page_obj.has_previous %}
+                    <li class="page-num">
+                        <a href="?page={{ page_obj.previous_page_number }}">&lt</a>
+                    </li>
+                    {% endif %}
+
+                    {% for p in paginator.page_range %}
+                    {% if page_obj.number == p %}
+                    <li class="page-num page-num-selected">{{ p }}</li>
+                    {% elif p >= page_obj.number|add:-2 and p <= page_obj.number|add:2 %}
+                    <li class="page-num">
+                        <a href="?page={{ p }}">{{ p }}</a>
+                    </li>
+                    {% endif %}
+                    {% endfor %}
+                     {% if page_obj.has_next %}
+                    <li class="page-num">
+                        <a href="?page={{ page_obj.next_page_number }}">&gt</a>
+                    </li>
+                    {% endif %}
+                </ul>
+            </nav>
+            {% endif %}
+        </div>
+    </td></tr></table>
+    </td></tr>
+<tr><td valign="top">
+    <div id="footer">
+        <p>&copy; Копирование информации запрещено</p>
+    </div>
+</td></tr>
+</table>
+</body>
+</html>

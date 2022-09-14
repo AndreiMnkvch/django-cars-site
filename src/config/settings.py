@@ -142,3 +142,29 @@ CACHES = {
         'LOCATION': os.path.join(BASE_DIR, 'carssite_cache'),
     }
 }
+LOGGING = {
+    'version': 1,
+    'disable_existing_loggers': False,
+
+    'formatters': {
+        'default': {
+            'format': '%(levelname)s %(name)s %(message)s %(asctime)s %(thread)d',
+        },
+    },
+    'handlers':  {
+        'file': {
+            'level': 'INFO',
+            'formatter': 'default',
+            'class': 'logging.FileHandler',
+            'filename': os.path.join(BASE_DIR, 'feedback_log.log'),
+        },
+    },
+    'loggers': {
+        'feedback': {
+            'handlers': ['file'],
+            'level': 'INFO',
+            'propagate': True,
+        },
+    },
+}
+

@@ -1,3 +1,5 @@
+import os
+
 from django.contrib.auth import logout, login
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.views import LoginView
@@ -7,6 +9,10 @@ from django.urls import reverse_lazy
 from django.views.generic import ListView, DetailView, CreateView, FormView
 from cars.forms import AddPostForm, RegisterUserForm, LoginUserForm, ContactForm
 from cars.utils import *
+import logging
+
+
+logger = logging.getLogger('feedback')
 
 
 class CarHome(DataMixin, ListView):
@@ -41,7 +47,6 @@ class AddArticle(LoginRequiredMixin, DataMixin, CreateView):
     login_url = reverse_lazy('home')
     raise_exception = True
 
-
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         c_def = self.get_user_context(title='Добавление статьи')
@@ -59,7 +64,7 @@ class ContactFormView(DataMixin, FormView):
         return context | c_def
 
     def form_valid(self, form):
-        print(form.cleaned_data)
+        logger.info(form.cleaned_data)
         return redirect('home')
 
 
@@ -112,7 +117,6 @@ class RegisterUser(DataMixin, CreateView):
 class LoginUser(DataMixin, LoginView):
     form_class = LoginUserForm
     template_name = 'cars/login.html'
-
 
     def get_context_data(self, *, object_list=None, **kwargs):
         context = super().get_context_data(**kwargs)

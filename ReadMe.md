@@ -8,12 +8,22 @@
 <ul>
 <li>git clone https://github.com/AndreiMnkvch/django-cars-site.git</li>
 or
-<li>git clone git@github.com:AndreiMnkvch/django-cars-site.git</li>
+
+git clone git@github.com:AndreiMnkvch/django-cars-site.git
+
+Now, go into root directory with the following command: 
 <li>cd django-cars-site</li>
+Set virtual environment: 
     <li>python -m venv venv</li>
+Activate it:
     <li>cd venv\Scripts\</li>
     <li>activate</li>
     <li>cd ..\..\src\</li>
+    Then jump into src\config\settings.py and set your value for SECRET_KEY.
+    The most secure way to do it is using environment variable. But for short you can hardcode it.
+    Ex: SECRET_KEY = 'MyVeryDifficultKey'
+
+Make sure your are in src\ directory and run next command.
     <li>pip install -r requirements.txt</li>
     <li>py manage.py runserver</li>
     <li>enjoy ;)</li>
